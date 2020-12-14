@@ -47,22 +47,24 @@ func (jobResponse *JobResponse) GetJobs() []*Job {
 
 // ToJob converts a JobWrapper into a Job
 func (jobWrapper *JobWrapper) ToJob() *Job {
-	date, err := time.Parse(time.RFC3339, jobWrapper.Date)
-
-	if err != nil {
-		log.Fatal("Error parsing date")
-	}
-
-	job := &Job{
+	return &Job{
 		ID:          jobWrapper.ID,
 		Company:     "NETFLIX",
 		Title:       jobWrapper.Title,
 		Category:    "SOFTWARE",
 		Description: jobWrapper.Description,
 		Location:    jobWrapper.Location,
-		Date:        date.Format("2006-01-02 15:04:05"),
+		Date:        transformDate(jobWrapper.Date),
 		URL:         jobWrapper.URL,
 	}
+}
 
-	return job
+func transformDate(dateString string) string {
+	date, err := time.Parse(time.RFC3339, dateString)
+
+	if err != nil {
+		log.Fatal("Error parsing date")
+	}
+
+	return date.Format("2006-01-02")
 }
